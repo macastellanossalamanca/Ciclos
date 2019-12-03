@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.eci.cvds.persistencia.mybatisimpl.mappers.PrestamoMapper">
+
+    <insert parameterType="map" id="registrarPrestamo" >
+        INSERT INTO prestamo (correousuario, idrecurso, fechainicio, fechaFin)
+            VALUES (#{pres.correoUsuario},#{pres.idRecurso},#{pres.fechaInicio},#{pres.fechaFin})
+    </insert>
+
+
+    <resultMap type='Prestamo' id='PrestamoResult'>
+        <id property='idPrestamo' column='idprestamo'/>
+        <result property='correoUsuario' column='correousuario'/>
+        <result property='IdRecurso' column='idrecurso'/>
+        <result property='fechaInicio' column='fechainicio'/>
+        <result property='fechaFin' column='fechafin'/>
+        
+    </resultMap>
+
+
+    <select parameterType='map' id='consultarPrestamos' resultMap='PrestamoResult'>
+    SELECT
+      idprestamo,
+      correoUsuario,
+      idrecurso,
+      fechainicio,
+	  fechafin
+
+     FROM
+      prestamo;
+  </select>
+
+    <select parameterType='map' id='consultarPrestamosUsuario' resultMap='PrestamoResult'>
+    SELECT
+      idprestamo,
+      correoUsuario,
+      idrecurso,
+      fechainicio,
+      fechafin
+
+    FROM
+      prestamo
+    WHERE #{correo}=correoUsuario;
+
+    </select>
+
+    <select parameterType='map' id='consultarPrestamosRecurso' resultMap='PrestamoResult'>
+    SELECT
+      idprestamo,
+      correoUsuario,
+      idrecurso,
+      fechainicio,
+      fechafin
+
+    FROM
+      prestamo
+    WHERE #{rec.identificadorInterno}=idrecurso;
+
+    </select>
+
+    <update id='modificarDuracionPrestamo' >
+      UPDATE prestamo
+      SET duracion = #{dur}
+      WHERE id = #{id}
+    </update>
+
+    <delete id="cancelarPrestamo" >
+        DELETE FROM prestamo
+        WHERE #{correo} = correoUsuario and #{id}=idRecurso;
+    </delete>
+
+</mapper>
